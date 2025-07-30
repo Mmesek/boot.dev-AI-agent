@@ -117,11 +117,11 @@ def main():
         if res.text and not function_call_part:
             print(res.text)
             break
-        fr = call_function(function_call_part[0])
-        fr.parts[0].function_response.response
-        messages.append(types.Content(parts=fr.parts, role="tool"))
-        if VERBOSE:
-            print(f"-> {fr.parts[0].function_response.response}")
+        for part in function_call_part or []:
+            fr = call_function(part)
+            messages.append(types.Content(parts=fr.parts, role="tool"))
+            if VERBOSE:
+                print(f"-> {fr.parts[0].function_response.response}")
     # print(res.text)
         if VERBOSE:
             print(f"User prompt: {user_prompt}")
