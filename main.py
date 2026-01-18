@@ -111,6 +111,10 @@ def main():
         i += 1
         res = client.models.generate_content(
             model="gemini-2.0-flash-001", contents=messages, config=types.GenerateContentConfig(tools=[available_functions], system_instruction=SYSTEM_PROMPT))
+        if not res.usage_metadata:
+            raise RuntimeError("No usage metadata returned")
+        print(
+            f"Prompt tokens: {res.usage_metadata.prompt_token_count}\nResponse tokens: {res.usage_metadata.candidates_token_count}")
         for candidate in res.candidates:
             messages.append(candidate.content)
         function_call_part = res.function_calls
